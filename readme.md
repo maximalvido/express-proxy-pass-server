@@ -26,7 +26,7 @@ Copy .env.example to .env and replace it's env vars values.
     ELEMENT_ID_TO_REMOVE= # check the framer badge id with the web inspector and put the id value of the element you want to remove.
 
 ### Public Folder
-There is a public folder where you can add:
+Create a folder named 'public' in the root of the repository folder where you can add:
  - favicon.ico
  - favicon.png
  - site.webmanifest
@@ -46,6 +46,6 @@ To be replaced automatically when the call is made by browsers or search engines
       - 3000:3000
 
   Run
-  
+
     docker compose up -d
     
