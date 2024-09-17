@@ -1,6 +1,7 @@
-import express, { Request, Response } from 'express';
-import path from 'path';
-import dotenv from 'dotenv'; 
+import express from 'express';
+import { Request, Response } from 'express';
+import * as path from 'path';
+import * as dotenv from 'dotenv'; 
 import { fetchURL } from './utils';
 
 dotenv.config(); 
@@ -29,6 +30,13 @@ app.get('/favicon.png', (request: Request, response: Response) => {
 
 app.get('*', async (request: Request, response: Response) => { 
   try {
+    console.log(`----------------------`);
+    console.log(`--- ${Date.now()} ----`);
+    console.log(`----------------------`);
+    console.log('Request URL: ', request.url);
+    console.log('Request Method: ', request.method);
+    console.log('Request body: ', request.body);
+    console.log('---------------------------');
     const splittedUrl: string[] = request.url.split('.');
     const format:string|undefined = splittedUrl.length > 0 ? formatMapping.get(splittedUrl[splittedUrl.length-1]) : undefined;
     const result = await fetchURL(`${BASE_URL}${request.url}`, format);
@@ -44,7 +52,11 @@ app.get('*', async (request: Request, response: Response) => {
 }); 
 
 app.listen(PORT, () => { 
-  console.log('Server running at PORT: ', PORT); 
+  console.log(`============== ENV ================`);
+  console.log('PORT: ', PORT); 
+  console.log('BASE_URL: ', process.env.BASE_URL); 
+  console.log('NEW_URL: ', process.env.NEW_URL); 
+  console.log(`===================================`);
   console.log('This server is only meant to reverse proxy requests to framer and remove the framer badge'); 
   console.log('This is only for Educational purposes.'); 
 
