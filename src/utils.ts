@@ -1,4 +1,6 @@
 import { JSDOM } from 'jsdom';
+import * as fs from 'fs';
+import * as path from 'path';
 
 
 async function fetchURL(url: string, format?: string) : Promise<string | Document>{
@@ -39,11 +41,33 @@ async function fetchURL(url: string, format?: string) : Promise<string | Documen
       console.log('Error: FRAMER_BADGE_ID is not set.');
     }
 
+    resolveOverrides(dom);
+
     return dom.window.document.documentElement.innerHTML;
   } catch (err) {
     console.error('The URL could not be fetched. Check the error below: ');
     console.error(err);
     throw err;
+  }
+}
+
+function resolveOverrides(dom: JSDOM) {
+  try {
+    const publicPath = path.join(__dirname,'../public/');
+    const cssFiles = fs.readdirSync(publicPath, {withFileTypes: true}).filter(file => {
+      const splitName = file.name.split('.');
+      return !file.isDirectory() && splitName[splitName.length - 1] === 'css';
+    });
+
+    cssFiles.forEach(file => {
+      dom.window.document.getElementsByTagName('head')[0].innerHTML += `<style>
+      ${fs.readFileSync(`${publicPath}${file.name}`)}
+      </style>`;
+    });
+
+  } catch (e) {
+    console.log('Error: resolveOverrides*() failed.');
+    console.log(e);
   }
 }
 
