@@ -28,6 +28,8 @@ app.get('/favicon.png', (request: Request, response: Response) => {
   response.sendFile(path.join(__dirname, '../public', 'favicon.png'));
 });
 
+app.get('/public', express.static('public'));
+
 app.get('*', async (request: Request, response: Response) => { 
   try {
     console.log(`----------------------`);
